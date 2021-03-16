@@ -44,13 +44,11 @@ def startTerminal():
         depth = 5
         moveCode = getBestMove(grid, depth)
         print(f'Move #{moves_count}: {moves_str[moveCode[0]]} | Utility {moveCode[1]}, NbEmpty {grid.nbEmpty()}')
-        grid.move(moveCode)
-        time.sleep(0.1)
-        if grid.isTerminal('min') is not True:
-            grid.add2Or4()
+        grid.move(moveCode[0])
+        grid.add2Or4()
         moves_count += 1
 
-#startTerminal()
-startRemoteController()
+startTerminal()
+#startRemoteController()
 
 # [1024, 1024, 256, 1024, 2048, 2048, 1024, 1024, 1024, 1024]
