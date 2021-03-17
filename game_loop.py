@@ -64,34 +64,11 @@ def evaluateModel(NbGame: int, modelName: str):
     for i in range(NbGame):
         score, maxTile = startTerminal()
         writeResultat(modelName, maxTile, score)
-
-
-def readResFile(fileName: str):
-    colnames = ['MaxTile','Score']
-    res = pd.read_csv(fileName + '.txt',names = colnames, sep=';')
-    print('-'*100)
-    print('Results algorithm :', fileName, '| Number of games : ', res.shape[0])
-    print('-'*100)
-    maxTiles = res['MaxTile'].tolist()
-    scores = res['Score'].tolist()
-    print('Max Tile reached :', res['MaxTile'].max())
-    print('Maximum Tile Mean :', res['MaxTile'].mean())
-    print('-'*100)
-    print('Score Max reached :', res['Score'].max())
-    print('Score Mean :', res['Score'].mean())
-    print('-'*100)
-    
-    print('Probability to reach the following values')
-    counter = Counter(maxTiles)
-    for key in counter:
-        probability = counter[key] / len(maxTiles) * 100
-        print(key, '|', str(probability) + '%')
         
 
 #evaluateModel(5, 'minmax')
 #startTerminal()
 #startRemoteController()
-readResFile('minmax')
 
 """
 grid = Grid([[]])
