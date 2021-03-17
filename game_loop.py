@@ -3,6 +3,7 @@ from GameDriver import GameDriver
 from minimax import getBestMove
 import time
 import sys, os
+import numpy as np
 
 def startRemoteController():
     gameDriver = GameDriver()
@@ -11,7 +12,6 @@ def startRemoteController():
 
     while True:
         grid = gameDriver.getGrid()
-        #grid.printGrid()
         if grid.isGameOver():
             print("Unfortunately, I lost the game.")
             break
@@ -34,8 +34,6 @@ def startTerminal():
 
     grid = Grid([[]])
     grid.initializeGrid()
-    grid.add2Or4()
-    grid.add2Or4()
 
     while True:
         grid.printGrid()
@@ -47,9 +45,20 @@ def startTerminal():
         grid.move(moveCode[0])
         grid.add2Or4()
         os.system('cls' if os.name=='nt' else 'clear')
-        print(f'Move #{moves_count}: {moves_str[moveCode[0]]} | Utility {moveCode[1]}, NbEmpty {grid.nbEmpty()}')
+        print(f'Move #{moves_count}: {moves_str[moveCode[0]]} | Utility {round(moveCode[1],2)} | Score {grid.score} | NbEmpty {grid.nbEmpty()}')
         moves_count += 1
 
 startTerminal()
 #startRemoteController()
-# [1024, 1024, 256, 1024, 2048, 2048, 1024, 1024, 1024, 1024]
+
+"""
+grid = Grid([[]])
+matrix = [
+    [256,64,0,0],
+    [128,0,0,0],
+    [0,0,256,0],
+    [0,0,0,0],
+]
+grid.setMatrix(matrix)
+print(grid.smoothness())
+"""

@@ -2,12 +2,13 @@ from copy import deepcopy
 from typing import Tuple, List
 import math
 import random
-import sys, time, os
+import sys, time, os, logging
 
 class Grid:
     
     def __init__(self, matrix):
         self.setMatrix(matrix)
+        self.score = 0
     
     # equal operator | a == b <=> A.__eq__(b)
     def __eq__(self, other) -> bool:
@@ -40,15 +41,17 @@ class Grid:
         monoWeight = 2.0
         emptyWeight = 2.7
         maxWeight = 1.0
-        # smoothWeight = 0.1
+        smoothWeight = 1
 
-        return self.maxValueCorner() * self.maxValue() / 3 + self.monotonicity() * monoWeight + self.nbEmpty() * emptyWeight + self.maxValue() * maxWeight
-
+        return self.smoothness() * smoothWeight + self.maxValueCorner() * self.maxValue() / 3 + self.monotonicity() * monoWeight + self.nbEmpty() * emptyWeight + self.maxValue() * maxWeight
+        
     def printGrid(self):
         print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in self.matrix]))
 
     def initializeGrid(self):
         self.matrix = [[0 for col in range(4)] for row in range(4)]
+        self.add2Or4()
+        self.add2Or4()
 
     def add2Or4(self):
         emptyCell = []
@@ -174,6 +177,7 @@ class Grid:
                     k = self.matrix[i][j]
                 elif k == self.matrix[i][j]:
                     self.matrix[w][j] = 2*k
+                    self.score += 2*k
                     w += 1
                     k = 0
                 else:
@@ -197,6 +201,7 @@ class Grid:
                     k = self.matrix[i][j]
                 elif k == self.matrix[i][j]:
                     self.matrix[w][j] = 2*k
+                    self.score += 2*k
                     w -= 1
                     k = 0
                 else:
@@ -220,6 +225,7 @@ class Grid:
                     k = self.matrix[i][j]
                 elif k == self.matrix[i][j]:
                     self.matrix[i][w] = 2*k
+                    self.score += 2*k
                     w += 1
                     k = 0
                 else:
@@ -243,6 +249,7 @@ class Grid:
                     k = self.matrix[i][j]
                 elif k == self.matrix[i][j]:
                     self.matrix[i][w] = 2*k
+                    self.score += 2*k
                     w -= 1
                     k = 0
                 else:
@@ -363,3 +370,18 @@ class Grid:
                 next+=1
                 
         return max(totals[0], totals[1]) + max(totals[2], totals[3])
+        
+    def smoothness(self) -> int:
+        smoothness = 0
+
+        for row in self.matrix:
+            for i in range(3):
+                if row[i] != 0 and row[i+1] != 0:
+                    smoothness -= abs((math.log(row[i])/math.log(2)) - (math.log(row[i+1])/math.log(2)))
+        
+        for j in range(4):
+            for i in range(3):
+                if self.matrix[i][j] != 0 and self.matrix[i+1][j] != 0:
+                    smoothness -= abs((math.log(self.matrix[i][j])/math.log(2)) - (math.log(self.matrix[i+1][j])/math.log(2)))
+        
+        return smoothness
