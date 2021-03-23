@@ -10,15 +10,15 @@ def readResFile(fileName: str):
     maxTiles = res['MaxTile'].tolist()
     scores = res['Score'].tolist()
     print('Max Tile reached :', res['MaxTile'].max())
-    print('Maximum Tile Mean :', res['MaxTile'].mean())
+    print('Maximum Tile Mean :', round(res['MaxTile'].mean(),2))
     print('-'*100)
     print('Score Max reached :', res['Score'].max())
-    print('Score Mean :', res['Score'].mean())
+    print('Score Mean :', round(res['Score'].mean(),2))
     print('-'*100)
     print('Probability to reach the following values')
     counter = Counter(maxTiles)
     for key in counter:
         probability = counter[key] / len(maxTiles) * 100
-        print(key, '|', str(probability) + '%')
+        print(key, '|', str(round(probability,2)) + '%')
 
 readResFile('minmax')

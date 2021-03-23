@@ -66,7 +66,7 @@ def evaluateModel(NbGame: int, modelName: str):
         writeResultat(modelName, maxTile, score)
         
 
-#evaluateModel(5, 'minmax')
+evaluateModel(5, 'minmax')
 #startTerminal()
 #startRemoteController()
 

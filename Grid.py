@@ -39,9 +39,9 @@ class Grid:
         return int(sum/count)
         """
         monoWeight = 2.0
-        emptyWeight = 2.7
+        emptyWeight = 1.7
         maxWeight = 1.0
-        smoothWeight = 1
+        smoothWeight = 0.1
 
         return self.smoothness() * smoothWeight + self.maxValueCorner() * self.maxValue() / 3 + self.monotonicity() * monoWeight + self.nbEmpty() * emptyWeight + self.maxValue() * maxWeight
         
