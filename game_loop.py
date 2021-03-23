@@ -1,6 +1,7 @@
 from Grid import Grid
 from GameDriver import GameDriver
 from minimax import getBestMove
+from expectiminimax import getBestMoveEMM
 import time
 import sys, os
 import numpy as np
@@ -43,7 +44,8 @@ def startTerminal():
             print("Unfortunately, I lost the game.")
             break
         depth = 5
-        moveCode = getBestMove(grid, depth)
+        #moveCode = getBestMove(grid, depth)
+        moveCode = getBestMoveEMM(grid, depth)
         grid.move(moveCode[0])
         grid.add2Or4()
         os.system('cls' if os.name=='nt' else 'clear')
@@ -65,8 +67,8 @@ def evaluateModel(NbGame: int, modelName: str):
         score, maxTile = startTerminal()
         writeResultat(modelName, maxTile, score)
         
-
-evaluateModel(5, 'minmax')
+evaluateModel(5,"emm")
+#evaluateModel(5, 'minmax')
 #startTerminal()
 #startRemoteController()
 

@@ -27,6 +27,7 @@ class Grid:
     def placeTile(self, row: int, col: int, tile: int):
         self.matrix[row-1][col-1] = tile
     
+    #function that gives a score to determine weather a grid is good or not.
     def utility(self) -> int:
         """
         count = 0
@@ -114,6 +115,7 @@ class Grid:
                         return True
         return False
     
+    #Remark : here Max is the player and Min is the computer which one fill the grid.
     def getAvailableMovesForMax(self) -> List[int]:
         moves = []
 
@@ -161,6 +163,8 @@ class Grid:
                 for j in range(4):
                     if self.matrix[i][j] == 0:
                         return False
+            return True
+        elif who == "rand":
             return True
     
     def isGameOver(self) -> bool:
@@ -317,7 +321,7 @@ class Grid:
         else:
             return False
         
-                    
+    #Verify that values are well ordered by order                
     def monotonicity(self) -> int:
         totals = [0,0,0,0]
         
@@ -371,6 +375,7 @@ class Grid:
                 
         return max(totals[0], totals[1]) + max(totals[2], totals[3])
         
+    #Evaluate the gap between neighboor values 
     def smoothness(self) -> int:
         smoothness = 0
 
