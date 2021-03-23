@@ -45,7 +45,28 @@ def startTerminalMinMax():
             print("Unfortunately, I lost the game.")
             break
         depth = 5
-        #moveCode = getBestMove(grid, depth)
+        moveCode = getBestMove(grid, depth)
+        grid.move(moveCode[0])
+        grid.add2Or4()
+        os.system('cls' if os.name=='nt' else 'clear')
+        print(f'Move #{moves_count}: {moves_str[moveCode[0]]} | Utility {round(moveCode[1],2)} | Score {grid.score} | NbEmpty {grid.nbEmpty()}')
+        moves_count += 1
+    
+    return grid.score, grid.maxValue()
+
+def startTerminalEmm():
+    moves_str = ['UP', 'DOWN', 'LEFT', 'RIGHT']
+    moves_count = 1
+
+    grid = Grid([[]])
+    grid.initializeGrid()
+
+    while True:
+        grid.printGrid()
+        if grid.isGameOver():
+            print("Unfortunately, I lost the game.")
+            break
+        depth = 5
         moveCode = getBestMoveEMM(grid, depth)
         grid.move(moveCode[0])
         grid.add2Or4()
@@ -84,6 +105,8 @@ def startTerminal(algoName: str):
         return startTerminalMinMax()
     elif algoName == 'random':
         return startTerminalRandom()
+    elif algoName == "emm":
+        return startTerminalEmm()
     else:
         print('Unknown algorithm')
 
