@@ -14,7 +14,7 @@ def expectiminimax(state: Grid, depth: int, node: str, nextnode: str):
         for child in state.getChildren(who=node):
             childGrid = Grid(matrix=state.getMatrix())
             childGrid.move(child)
-            grid, b = expectiminimax(childGrid, depth, "min", "min")
+            grid, b = expectiminimax(childGrid, depth, "rand", "min")
             if a < b:
                 resGrid = grid
                 a = b
