@@ -15,6 +15,7 @@ class GridEnv(Grid,gym.Env):
         self.observation_space = spaces.Box(0, 2**16, (self.size*self.size, ), dtype = np.int)
         self.matrix = []
         self.initializeGrid()
+        self.state = self.matrix
         self.seed()
         self.score = 0
 
@@ -25,24 +26,35 @@ class GridEnv(Grid,gym.Env):
     def step(self, action):
         # Play one step of the game. Moving and adding a new tile
         score = 0
-        if action == 0 and self.canMoveUp():
-            score += self.up()
-        elif action == 1 and self.canMoveDown():
-            score += self.down()
-        elif action == 2 and self.canMoveLeft():
-            score += self.left()
-        elif action == 3 and self.canMoveRight():
-            score += self.right()
-        else:
-            reward == -5
-        reward = score
-        self.move(action)
-        self.add2Or4()
-        reward = self.score
+
         if self.isGameOver():
             done = True
+            observation = self.matrix
+            reward = -5
+            info = {}
+            return observation, reward, done, info
         else:
             done = False
+
+        if action == 0 and self.canMoveUp():
+            score += self.up()
+            reward = float(score)
+            self.add2Or4()
+        elif action == 1 and self.canMoveDown():
+            score += self.down()
+            reward = float(score)
+            self.add2Or4()
+        elif action == 2 and self.canMoveLeft():
+            score += self.left()
+            reward = float(score)
+            self.add2Or4()
+        elif action == 3 and self.canMoveRight():
+            score += self.right()
+            reward = float(score)
+            self.add2Or4()
+        else:
+            reward = -5
+
         info = {}
         observation = self.matrix
         return observation, reward, done, info
@@ -57,7 +69,7 @@ class GridEnv(Grid,gym.Env):
         #os.system('cls' if os.name=='nt' else 'clear')
         self.initializeGrid()
         self.score = 0
-
+        return self.getMatrix()
 
     def up(self):
         scoreToReturn = 0
@@ -166,3 +178,17 @@ class GridEnv(Grid,gym.Env):
             for j in range(w+1):
                 self.matrix[i][j] = 0
         return scoreToReturn
+
+
+"""
+env = GridEnv()
+print(env.render())
+matrix = [
+    [1,2,3,4],
+    [5,6,7,8],
+    [1,2,3,4],
+    [5,6,7,8],
+]
+env.setMatrix(matrix)
+print(not env.isGameOver())
+"""

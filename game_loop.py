@@ -6,6 +6,7 @@ import sys, os
 import numpy as np
 import pandas as pd
 from collections import Counter
+import random
 
 def startRemoteController():
     gameDriver = GameDriver()
@@ -30,7 +31,7 @@ def startRemoteController():
         gameDriver.move(moveCode[0])
         moves_count += 1
 
-def startTerminal():
+def startTerminalMinMax():
     moves_str = ['UP', 'DOWN', 'LEFT', 'RIGHT']
     moves_count = 1
 
@@ -52,6 +53,39 @@ def startTerminal():
     
     return grid.score, grid.maxValue()
 
+def startTerminalRandom():
+    moves_str = ['UP', 'DOWN', 'LEFT', 'RIGHT']
+    moves_count = 1
+
+
+    grid = Grid([[]])
+    grid.initializeGrid()
+
+    while True:
+        grid.printGrid()
+        if grid.isGameOver():
+            print("Unfortunately, I lost the game.")
+            break
+        moves = grid.getAvailableMovesForMax()
+        move_chosen = random.choice(moves)
+        grid.move(move_chosen)
+        grid.add2Or4()
+        os.system('cls' if os.name=='nt' else 'clear')
+        print(f'Move #{moves_count}: {moves_str[move_chosen]} | Score {grid.score} | NbEmpty {grid.nbEmpty()}')
+        moves_count += 1
+
+    return grid.score, grid.maxValue()
+
+
+def startTerminal(algoName: str):
+    if algoName == 'minmax':
+        return startTerminalMinMax()
+    elif algoName == 'random':
+        return startTerminalRandom()
+    else:
+        print('Unknown algorithm')
+
+
 
 def writeResultat(fileName: str, maxTile: int, score: int):
     resultats = []
@@ -62,11 +96,11 @@ def writeResultat(fileName: str, maxTile: int, score: int):
 
 def evaluateModel(NbGame: int, modelName: str):
     for i in range(NbGame):
-        score, maxTile = startTerminal()
+        score, maxTile = startTerminal(modelName)
         writeResultat(modelName, maxTile, score)
         
 
-evaluateModel(5, 'minmax')
+evaluateModel(10, 'random')
 #startTerminal()
 #startRemoteController()
 
