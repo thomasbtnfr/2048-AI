@@ -8,7 +8,7 @@ class GameDriver:
     def __init__(self):
         self.url = 'https://framagames.org/2048originel/index.html'
         self.driver = webdriver.Chrome(ChromeDriverManager().install())
-        self.driver.maximize_window()
+        #self.driver.maximize_window()
         self.driver.get(self.url)
         self.body = self.driver.find_element_by_tag_name('body')
         self.moves = {

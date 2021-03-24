@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 from collections import Counter
 import random
+import SupervisedNN
 
 def startRemoteController():
     gameDriver = GameDriver()
@@ -46,6 +47,11 @@ def startTerminalMinMax():
             break
         depth = 5
         moveCode = getBestMove(grid, depth)
+
+        tmp = [0,0,0,0]
+        tmp[moveCode[0]] = 1
+        writeResultat('supervisedData',flattenMatrix(grid.getMatrix()), tmp)
+
         grid.move(moveCode[0])
         grid.add2Or4()
         os.system('cls' if os.name=='nt' else 'clear')
@@ -111,7 +117,6 @@ def startTerminal(algoName: str):
         print('Unknown algorithm')
 
 
-
 def writeResultat(fileName: str, maxTile: int, score: int):
     resultats = []
     resultats.append(str(maxTile) + ';' + str(score) + '\n')
@@ -123,15 +128,17 @@ def evaluateModel(NbGame: int, modelName: str):
     for i in range(NbGame):
         score, maxTile = startTerminal(modelName)
         writeResultat(modelName, maxTile, score)
+
+def flattenMatrix(matrix):
+    res = []
+    for row in matrix:
+        for elem in row:
+            res.append(elem)
+    return res
         
 
-evaluateModel(5,"emm")
-#evaluateModel(5, 'minmax')
+evaluateModel(5,"minmax")
 
-
-#evaluateModel(10, 'random')
-
-#startTerminal()
 #startRemoteController()
 
 """
