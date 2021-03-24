@@ -8,7 +8,6 @@ import numpy as np
 import pandas as pd
 from collections import Counter
 import random
-import SupervisedNN
 
 def startRemoteController():
     gameDriver = GameDriver()
@@ -50,7 +49,13 @@ def startTerminalMinMax():
 
         tmp = [0,0,0,0]
         tmp[moveCode[0]] = 1
-        writeResultat('supervisedData',flattenMatrix(grid.getMatrix()), tmp)
+        matrixSupervised = grid.getMatrix()
+        for i in range(4):
+            for j in range(4):
+                if matrixSupervised[i][j] == 0:
+                    matrixSupervised[i][j] = 1
+                matrixSupervised[i][j] = (np.log2(matrixSupervised[i][j]) / np.log2(65536))
+        writeResultat('supervisedData',flattenMatrix(matrixSupervised), tmp)
 
         grid.move(moveCode[0])
         grid.add2Or4()
@@ -150,5 +155,5 @@ matrix = [
     [0,0,0,0],
 ]
 grid.setMatrix(matrix)
-print(grid.smoothness())
+matrix2 = grid.getMatrix()
 """

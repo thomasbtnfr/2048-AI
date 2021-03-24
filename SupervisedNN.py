@@ -114,20 +114,22 @@ def trainModel(model):
     gridList, moveList = readSupervisedData()
 
     X_train,X_test,y_train,y_test = train_test_split(gridList,moveList, test_size = 0.2, random_state=42)
-
+    
     print(model.summary())
     model.compile(
         loss='categorical_crossentropy',
         optimizer='adam',
         metrics=['accuracy','categorical_accuracy'])
 
-    model.fit(X_train, y_train, epochs=100, batch_size=32)
+    model.fit(X_train, y_train, epochs=200, batch_size=32)
     model.save('supervisedModel')
+    res = model.evaluate(X_test, y_test, verbose = 1)
+    print("test loss, test acc, test categorical:",res)
 
 
 
-#model = build_model()
-#trainModel(model)
+# model = build_model()
+# trainModel(model)
 
 model = tf.keras.models.load_model('supervisedModel')
 startTerminalSupervised(model)
