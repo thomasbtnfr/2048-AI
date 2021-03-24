@@ -96,7 +96,6 @@ def readSupervisedData():
     res = pd.read_csv('supervisedData' + '.txt',names = colnames, sep=';')
     gridList = np.array(res['Grid'].tolist())
     moveList = np.array(res['Move'].tolist())
-    print(gridList)
 
     tmp = []
     for elem in gridList:
@@ -115,21 +114,20 @@ def trainModel(model):
     gridList, moveList = readSupervisedData()
 
     X_train,X_test,y_train,y_test = train_test_split(gridList,moveList, test_size = 0.2, random_state=42)
-    print(X_test[0])
 
     print(model.summary())
     model.compile(
-        loss='binary_crossentropy',
+        loss='categorical_crossentropy',
         optimizer='adam',
-        metrics=['binary_accuracy'])
+        metrics=['accuracy','categorical_accuracy'])
 
-    model.fit(X_train, y_train, epochs=50, batch_size=32)
+    model.fit(X_train, y_train, epochs=100, batch_size=32)
     model.save('supervisedModel')
 
 
 
-# model = build_model()
-# trainModel(model)
+#model = build_model()
+#trainModel(model)
 
 model = tf.keras.models.load_model('supervisedModel')
 startTerminalSupervised(model)
