@@ -1,5 +1,6 @@
 import pandas as pd
 from collections import Counter
+import sys
 
 def readResFile(fileName: str):
     colnames = ['MaxTile','Score']
@@ -21,4 +22,8 @@ def readResFile(fileName: str):
         probability = counter[key] / len(maxTiles) * 100
         print(key, '|', str(round(probability,2)) + '%')
 
-readResFile('supervised')
+def main(argv):
+    readResFile(argv)
+
+if __name__ == "__main__":
+    main(sys.argv[1])
