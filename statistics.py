@@ -21,4 +21,4 @@ def readResFile(fileName: str):
         probability = counter[key] / len(maxTiles) * 100
         print(key, '|', str(round(probability,2)) + '%')
 
-readResFile('random')
+readResFile('supervised')

@@ -171,6 +171,7 @@ class Grid:
         return self.isTerminal(who="max")
     
     def up(self):
+        scoreToReturn = 0
         for j in range(4):
             w = 0
             k = 0
@@ -182,6 +183,7 @@ class Grid:
                 elif k == self.matrix[i][j]:
                     self.matrix[w][j] = 2*k
                     self.score += 2*k
+                    scoreToReturn += 2*k
                     w += 1
                     k = 0
                 else:
@@ -193,8 +195,10 @@ class Grid:
                 w += 1
             for i in range(w, 4):
                 self.matrix[i][j] = 0
+        return scoreToReturn
     
     def down(self):
+        scoreToReturn = 0
         for j in range(4):
             w = 3
             k = 0
@@ -206,6 +210,7 @@ class Grid:
                 elif k == self.matrix[i][j]:
                     self.matrix[w][j] = 2*k
                     self.score += 2*k
+                    scoreToReturn += 2*k
                     w -= 1
                     k = 0
                 else:
@@ -217,8 +222,10 @@ class Grid:
                 w -= 1
             for i in range(w+1):
                 self.matrix[i][j] = 0
+        return scoreToReturn
     
     def left(self):
+        scoreToReturn = 0
         for i in range(4):
             w = 0
             k = 0
@@ -230,6 +237,7 @@ class Grid:
                 elif k == self.matrix[i][j]:
                     self.matrix[i][w] = 2*k
                     self.score += 2*k
+                    scoreToReturn += 2*k
                     w += 1
                     k = 0
                 else:
@@ -241,8 +249,10 @@ class Grid:
                 w += 1
             for j in range(w, 4):
                 self.matrix[i][j] = 0
+        return scoreToReturn
     
     def right(self):
+        scoreToReturn = 0
         for i in range(4):
             w = 3
             k = 0
@@ -254,6 +264,7 @@ class Grid:
                 elif k == self.matrix[i][j]:
                     self.matrix[i][w] = 2*k
                     self.score += 2*k
+                    scoreToReturn += 2*k
                     w -= 1
                     k = 0
                 else:
@@ -265,16 +276,18 @@ class Grid:
                 w -= 1
             for j in range(w+1):
                 self.matrix[i][j] = 0
+        return scoreToReturn
     
-    def move(self, mv: int) -> None:
+    def move(self, mv: int):
         if mv == 0:
-            self.up()
+            score = self.up()
         elif mv == 1:
-            self.down()
+            score = self.down()
         elif mv == 2:
-            self.left()
+            score = self.left()
         else:
-            self.right()
+            score = self.right()
+        return score
     
     def getMoveTo(self, child: 'Grid') -> int:
         if self.canMoveUp():

@@ -2,12 +2,16 @@ from Grid import Grid
 from GameDriver import GameDriver
 from minimax import getBestMove
 from expectiminimax import getBestMoveEMM
+from SupervisedNN import flattenMatrix
+from MCTS import mcts_move
 import time
 import sys, os
 import numpy as np
 import pandas as pd
 from collections import Counter
 import random
+import tensorflow as tf
+
 
 def startRemoteController():
     gameDriver = GameDriver()
@@ -110,6 +114,57 @@ def startTerminalRandom():
 
     return grid.score, grid.maxValue()
 
+def startTerminalSupervised(model):
+    moves_count = 1
+
+    grid = Grid([[]])
+    grid.initializeGrid()
+
+    while True:
+        grid.printGrid()
+        if grid.isGameOver():
+            print("Unfortunately, I lost the game.")
+            break
+        pred = model.predict(np.array([flattenMatrix(grid.getMatrix())]))
+        pred = pred[0]
+        orderedMoveCode = np.argsort(pred)[::-1]
+        for move in orderedMoveCode:
+            if (move == 0 and grid.canMoveUp()) or (move == 1 and grid.canMoveDown()) or (move == 2 and grid.canMoveLeft()) or (move == 3 and grid.canMoveRight()):
+                grid.move(move)
+                break
+        grid.add2Or4()
+        os.system('cls' if os.name=='nt' else 'clear')
+        print(f'Move #{moves_count} | Score {grid.score}')
+        moves_count += 1
+
+    return grid.score, grid.maxValue()
+
+def startTerminalMCTS():
+    moves_str = ['UP', 'DOWN', 'LEFT', 'RIGHT']
+    moves_count = 1
+
+    grid = Grid([[]])
+    grid.initializeGrid()
+
+    while True:
+        grid.printGrid()
+        if grid.isGameOver():
+            print("Unfortunately, I lost the game.")
+            break
+        moveCode = mcts_move(grid, 40, 30)
+        grid.move(moveCode)
+        grid.add2Or4()
+        os.system('cls' if os.name=='nt' else 'clear')
+        print(f'Move #{moves_count}: {moves_str[moveCode]} | Score {grid.score} | NbEmpty {grid.nbEmpty()}')
+        moves_count += 1
+    
+    return grid.score, grid.maxValue()
+
+def writeResultat(fileName: str, maxTile: int, score: int):
+    resultats = []
+    resultats.append(str(maxTile) + ';' + str(score) + '\n')
+    with open(fileName + '.txt', 'a') as f:
+        f.write(''.join(resultats))
 
 def startTerminal(algoName: str):
     if algoName == 'minmax':
@@ -118,31 +173,21 @@ def startTerminal(algoName: str):
         return startTerminalRandom()
     elif algoName == "emm":
         return startTerminalEmm()
+    elif algoName == "supervised":
+        return startTerminalSupervised(tf.keras.models.load_model('supervisedModel'))
+    elif algoName == 'mcts':
+        return startTerminalMCTS()
     else:
         print('Unknown algorithm')
-
-
-def writeResultat(fileName: str, maxTile: int, score: int):
-    resultats = []
-    resultats.append(str(maxTile) + ';' + str(score) + '\n')
-    with open(fileName + '.txt', 'a') as f:
-        f.write(''.join(resultats))
-
 
 def evaluateModel(NbGame: int, modelName: str):
     for i in range(NbGame):
         score, maxTile = startTerminal(modelName)
         writeResultat(modelName, maxTile, score)
-
-def flattenMatrix(matrix):
-    res = []
-    for row in matrix:
-        for elem in row:
-            res.append(elem)
-    return res
         
 
-evaluateModel(5,"minmax")
+
+evaluateModel(5,"mcts")
 
 #startRemoteController()
 

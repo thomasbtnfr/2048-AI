@@ -64,33 +64,6 @@ def build_model():
     model.add(tf.keras.layers.Dense(4, activation="softmax"))
     return model
 
-def startTerminalSupervised(model):
-    moves_str = ['UP', 'DOWN', 'LEFT', 'RIGHT']
-    moves_count = 1
-
-    grid = Grid([[]])
-    grid.initializeGrid()
-
-    while True:
-        grid.printGrid()
-        if grid.isGameOver():
-            print("Unfortunately, I lost the game.")
-            break
-        pred = model.predict(np.array([flattenMatrix(grid.getMatrix())]))
-        pred = pred[0]
-        orderedMoveCode = np.argsort(pred)[::-1]
-        for move in orderedMoveCode:
-            if (move == 0 and grid.canMoveUp()) or (move == 1 and grid.canMoveDown()) or (move == 2 and grid.canMoveLeft()) or (move == 3 and grid.canMoveRight()):
-                grid.move(move)
-                break
-        grid.add2Or4()
-        os.system('cls' if os.name=='nt' else 'clear')
-        print(f'Move #{moves_count} | Score {grid.score}')
-        moves_count += 1
-    
-    return grid.score, grid.maxValue()
-
-
 def readSupervisedData():
     colnames = ['Grid','Move']
     res = pd.read_csv('supervisedData' + '.txt',names = colnames, sep=';')
@@ -127,9 +100,5 @@ def trainModel(model):
     print("test loss, test acc, test categorical:",res)
 
 
-
 # model = build_model()
 # trainModel(model)
-
-model = tf.keras.models.load_model('supervisedModel')
-startTerminalSupervised(model)
