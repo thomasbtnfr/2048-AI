@@ -3,6 +3,7 @@ from typing import Tuple, List
 import math
 import random
 import sys, time, os, logging
+import numpy as np
 
 class Grid:
     
