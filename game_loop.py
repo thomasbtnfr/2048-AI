@@ -151,7 +151,7 @@ def startTerminalMCTS():
         if grid.isGameOver():
             print("Unfortunately, I lost the game.")
             break
-        moveCode = mcts_move(grid, 40, 30)
+        moveCode = mcts_move(grid, 40, 40)
         grid.move(moveCode)
         grid.add2Or4()
         os.system('cls' if os.name=='nt' else 'clear')
@@ -185,11 +185,11 @@ def evaluateModel(NbGame: int, modelName: str):
         score, maxTile = startTerminal(modelName)
         writeResultat(modelName, maxTile, score)
         
+def main(argv):
+    evaluateModel(int(argv[2]),argv[1])
 
-
-evaluateModel(5,"mcts")
-
-#startRemoteController()
+if __name__ == "__main__":
+    main(sys.argv)
 
 """
 grid = Grid([[]])
