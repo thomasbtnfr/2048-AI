@@ -81,7 +81,7 @@ def startTerminalEmm():
         if grid.isGameOver():
             print("Unfortunately, I lost the game.")
             break
-        depth = 5
+        depth = 3
         moveCode = getBestMoveEMM(grid, depth)
         grid.move(moveCode[0])
         grid.add2Or4()

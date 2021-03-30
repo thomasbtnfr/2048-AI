@@ -63,6 +63,9 @@ class Grid:
         cell = random.choice(emptyCell)
         self.matrix[cell[0]][cell[1]] = 2 if random.random() < 0.9 else 4
 
+    def insertTile(self, position, value):
+        self.matrix[position[0]][position[1]] = value
+
     def canMoveUp(self) -> bool:
         for j in range(4):
             k = -1
