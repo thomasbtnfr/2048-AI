@@ -2,7 +2,6 @@ from typing import Tuple, List
 from sys import maxsize as MAX_INT
 from Grid import Grid
 
-
 def expectiminimax(state: Grid, depth: int, node: str, nextnode: str):
     resGrid = Grid(matrix=state.getMatrix())
     if state.isTerminal(who=node) or depth == 0:
@@ -38,7 +37,7 @@ def expectiminimax(state: Grid, depth: int, node: str, nextnode: str):
 
 def maximize(state: Grid, depth=0) :
     if state.isTerminal(who="max") or depth == 0:
-        return None, state.utility()
+        return None, state.eval_board()
     depth -= 1
     bestMove = None
     maxUtility = float('-inf')
@@ -55,9 +54,9 @@ def chance (state: Grid, depth: int):
     emptyCells = state.getAvailableMovesForMin()
     nbEmpty = len(emptyCells)
     if state.isTerminal(who="min") or depth == 0:
-        return state.utility()
+        return state.eval_board()
     depth -= 1
-
+#Ici c'était pour incrémenter la depth et à partir d'une certaine depth on retourne directement la utility(), on fait pas récursion, c'est ptet mieux.
     # if nbEmpty >= 6 and depth >= 3:
     #     return state.utility()
     # if nbEmpty >=0 and depth >=5:

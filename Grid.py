@@ -3,6 +3,7 @@ from typing import Tuple, List
 import math
 import random
 import sys, time, os, logging
+import numpy as np
 
 class Grid:
     
@@ -26,7 +27,35 @@ class Grid:
     
     def placeTile(self, row: int, col: int, tile: int):
         self.matrix[row-1][col-1] = tile
-    
+
+    def eval_board(self): 
+        grid = self.matrix
+
+        utility = 0
+        smoothness = 0
+
+        big_t = np.sum(np.power(grid, 2))
+        s_grid = np.sqrt(grid)
+        smoothness -= np.sum(np.abs(s_grid[::,0] - s_grid[::,1]))
+        smoothness -= np.sum(np.abs(s_grid[::,1] - s_grid[::,2]))
+        smoothness -= np.sum(np.abs(s_grid[::,2] - s_grid[::,3]))
+        smoothness -= np.sum(np.abs(s_grid[0,::] - s_grid[1,::]))
+        smoothness -= np.sum(np.abs(s_grid[1,::] - s_grid[2,::]))
+        smoothness -= np.sum(np.abs(s_grid[2,::] - s_grid[3,::]))
+        
+        empty_w = 100000
+        smoothness_w = 3
+
+        empty_u = self.nbEmpty() * empty_w
+        smooth_u = smoothness ** smoothness_w
+        big_t_u = big_t
+
+        utility += big_t
+        utility += empty_u
+        utility += smooth_u
+
+        return utility
+
     #function that gives a score to determine weather a grid is good or not.
     def utility(self) -> int:
         """
