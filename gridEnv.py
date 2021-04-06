@@ -6,7 +6,7 @@ from gym import spaces
 from Grid import Grid
 from typing import Any, Dict, Tuple, List
 import copy
-import os, time
+import os, time, random
 
 class GridEnv(gym.Env,Grid):
 
@@ -23,30 +23,30 @@ class GridEnv(gym.Env,Grid):
         return self.observe()
 
     def step(self, action: int) -> Tuple[List[float], int, bool, Dict[Any,Any]]:
-        reward = 0
+        reward = - self.score
         if action == 0 and self.canMoveUp():
             self.move(action)
             self.add2Or4()
-            reward += 2
+            reward += 5
         elif action == 1 and self.canMoveDown():
             self.move(action)
             self.add2Or4()
-            reward += 2
+            reward += 5
         elif action == 2 and self.canMoveLeft():
             self.move(action)
             self.add2Or4()
-            reward += 2
+            reward += 5
         elif action == 3 and self.canMoveRight():
             self.move(action)
             self.add2Or4()
-            reward += 2
+            reward += 5
         else:
             reward -= 10
-        return self.observe(), (reward+self.score), self.locked(), {}
+        return self.observe(), (reward + self.score), self.locked(), {}
         # return reward, observation, done, info
 
     def observe(self) -> List[float]:
-        return [[x for x in line] for line in self.matrix]
+        return [[(np.log2(x)/np.log2(65536) if x != 0 else 0) for x in line] for line in self.matrix]
         #return observation
 
     def render(self, mode: str = "human", close: bool = False) -> None:
@@ -56,17 +56,7 @@ class GridEnv(gym.Env,Grid):
 
     def locked(self) -> bool:
         clone = copy.deepcopy(self)
-        for direction in range(4):
-            if clone.canMoveUp() or clone.canMoveDown() or clone.canMoveLeft() or clone.canMoveRight(): 
-                return False
+        if clone.canMoveUp() or clone.canMoveDown() or clone.canMoveLeft() or clone.canMoveRight(): 
+            return False
         return True
 
-"""
-env = GridEnv()
-env.render()
-print('-'*50)
-env.render()
-print(env.observe())
-env.step(0)
-env.render()
-"""

@@ -9,7 +9,6 @@ from rl.policy import LinearAnnealedPolicy, BoltzmannQPolicy, EpsGreedyQPolicy
 from rl.memory import SequentialMemory
 from rl.callbacks import FileLogger, ModelIntervalCheckpoint
 
-
 from gridEnv import GridEnv
 
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
@@ -32,6 +31,8 @@ def build_model():
     return model
 
 env = GridEnv()
+np.random.seed(123)
+env.seed(123)
 nb_actions = env.action_space.n
 print(nb_actions)
 
@@ -48,15 +49,13 @@ dqn.compile(Adam(lr=.00025), metrics=['mae'])
 
 weights_filename = 'data/weights.h5f'
 checkpoint_weights_filename = 'data/weights_ch_{step}.h5f'
-log_filename = 'data/log.json'
 callbacks = [ModelIntervalCheckpoint(checkpoint_weights_filename, interval=250000)]
-callbacks += [FileLogger(log_filename, interval=100)]
-dqn.fit(env, callbacks=callbacks, nb_steps=50000, log_interval=10000)
 
-# After training is done, we save the final weights one more time.
+dqn.fit(env, callbacks=callbacks, nb_steps=500000, verbose=1)
 dqn.save_weights(weights_filename, overwrite=True)
 
 testEnv = GridEnv()
 testEnv.reset()
 
-dqn.test(testEnv, nb_episodes=10, visualize=True)
+dqn.load_weights('data/weights.h5f')
+dqn.test(testEnv, nb_episodes=10, visualize=True, verbose=1)

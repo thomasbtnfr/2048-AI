@@ -58,16 +58,6 @@ class Grid:
 
     #function that gives a score to determine weather a grid is good or not.
     def utility(self) -> int:
-        """
-        count = 0
-        sum = 0
-        for i in range(4):
-            for j in range(4):
-                sum += self.matrix[i][j]
-                if self.matrix[i][j] != 0:
-                    count += 1
-        return int(sum/count)
-        """
         monoWeight = 2.0
         emptyWeight = 1.7
         maxWeight = 1.0
