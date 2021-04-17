@@ -3,7 +3,11 @@ from collections import Counter
 import sys
 import glob, os
 import matplotlib.pyplot as plt
+from sys import maxsize as MAX_INT
 from cycler import cycler
+from matplotlib import rcParams
+
+rcParams.update({'figure.autolayout':True}) # to avoid having the xlabel cut
 
 def readResFile(fileName: str):
     colnames = ['MaxTile','Score']
@@ -50,7 +54,54 @@ def printGraph():
 
 
 def printHisto():
-    pass
+    
+    os.chdir("./")
+    colnames = ['MaxTile','Score']
+    algoNames = []
+
+    listProbs = []
+    listLabels = []
+
+    for file in glob.glob("*.txt"):
+        if file != "supervisedData.txt":
+            algoNames.append(file)
+            res = pd.read_csv(file, names=colnames, sep=';')
+            maxTiles = res['MaxTile'].tolist()
+            counter = Counter(maxTiles)
+            probs = []
+            labels = []
+            for key in counter:
+                probability = counter[key] / len(maxTiles) * 100
+                probs.append(round(probability,2))
+                labels.append(key)
+            listProbs.append(probs)
+            listLabels.append(labels)
+
+    print("Algos", algoNames)
+    print("Labels", listLabels)
+    print("Probs", listProbs)
+
+    setLabels = sum(listLabels,[])
+    allLabels = sorted((list(set(setLabels))))
+    print(allLabels)
+
+    dfdata = pd.DataFrame({},
+        index = algoNames, columns = allLabels
+    )
+    for algo in range(len(algoNames)):
+        listtoappend = []
+        for i in range(len(allLabels)):
+            index = listLabels[algo].index(allLabels[i]) if allLabels[i] in listLabels[algo] else -1
+            listtoappend.append(listProbs[algo][index]) if index != -1 else listtoappend.append(0)
+            print(listtoappend)
+        dfdata.loc[algoNames[algo]] = listtoappend
+    algoNamesNoTxt = [name.replace('.txt','') for name in algoNames]
+    dfdata.index = algoNamesNoTxt
+    print(dfdata)
+    dfdata.plot(kind="bar",stacked=True, rot=45, include_bool = 1,title='Percentage of maximum value for all algorithms')
+    
+    plt.legend(loc='upper right')
+    plt.show()
 
 
 def main(argv):
