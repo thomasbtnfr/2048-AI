@@ -425,3 +425,7 @@ class Grid:
                     smoothness -= abs((math.log(self.matrix[i][j])/math.log(2)) - (math.log(self.matrix[i+1][j])/math.log(2)))
         
         return smoothness
+
+    def matrix_to_log(self):
+        mat = [[(np.log2(x)/np.log2(65536) if x != 0 else 0) for x in line] for line in self.matrix]
+        return Grid(mat)

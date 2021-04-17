@@ -51,6 +51,8 @@ def startTerminalMinMax():
         depth = 5
         moveCode = getBestMove(grid, depth)
 
+        """
+        # to save moves for supervised algorithm
         tmp = [0,0,0,0]
         tmp[moveCode[0]] = 1
         matrixSupervised = grid.getMatrix()
@@ -60,6 +62,7 @@ def startTerminalMinMax():
                     matrixSupervised[i][j] = 1
                 matrixSupervised[i][j] = (np.log2(matrixSupervised[i][j]) / np.log2(65536))
         writeResultat('supervisedData',flattenMatrix(matrixSupervised), tmp)
+        """
 
         grid.move(moveCode[0])
         grid.add2Or4()

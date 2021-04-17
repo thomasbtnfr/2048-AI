@@ -94,8 +94,7 @@ def printHisto():
     print(dfdata)
     
     plt.style.use('ggplot')
-
-    ax = dfdata.plot(stacked=True, kind='bar', figsize=(12, 8), rot='horizontal',title='Percentage of maximum value for all algorithms')
+    ax = dfdata.plot(stacked=True, kind='bar', figsize=(12, 8), rot='horizontal',title='Percentage maximum value for all algorithms')
 
     # .patches is everything inside of the chart
     for rect in ax.patches:
