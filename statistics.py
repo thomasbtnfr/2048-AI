@@ -77,13 +77,8 @@ def printHisto():
             listProbs.append(probs)
             listLabels.append(labels)
 
-    print("Algos", algoNames)
-    print("Labels", listLabels)
-    print("Probs", listProbs)
-
     setLabels = sum(listLabels,[])
     allLabels = sorted((list(set(setLabels))))
-    print(allLabels)
 
     dfdata = pd.DataFrame({},
         index = algoNames, columns = allLabels
@@ -93,14 +88,35 @@ def printHisto():
         for i in range(len(allLabels)):
             index = listLabels[algo].index(allLabels[i]) if allLabels[i] in listLabels[algo] else -1
             listtoappend.append(listProbs[algo][index]) if index != -1 else listtoappend.append(0)
-            print(listtoappend)
         dfdata.loc[algoNames[algo]] = listtoappend
     algoNamesNoTxt = [name.replace('.txt','') for name in algoNames]
     dfdata.index = algoNamesNoTxt
     print(dfdata)
-    dfdata.plot(kind="bar",stacked=True, rot=45, include_bool = 1,title='Percentage of maximum value for all algorithms')
     
-    plt.legend(loc='upper right')
+    plt.style.use('ggplot')
+
+    ax = dfdata.plot(stacked=True, kind='bar', figsize=(12, 8), rot='horizontal',title='Percentage of maximum value for all algorithms')
+
+    # .patches is everything inside of the chart
+    for rect in ax.patches:
+        # Find where everything is located
+        height = round(rect.get_height(),2)
+        width = rect.get_width()
+        x = rect.get_x()
+        y = rect.get_y()
+        
+        # The height of the bar is the data value and can be used as the label
+        label_text = f'{height}'  # f'{height:.2f}' to format decimal values
+        
+        # ax.text(x, y, text)
+        label_x = x + width / 2
+        label_y = y + height / 2
+
+        # plot only when height is greater than specified value
+        if height > 0:
+            ax.text(label_x, label_y, label_text, ha='center', va='center', fontsize=8)
+        
+    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)    
     plt.show()
 
 
