@@ -22,10 +22,10 @@ class TestLogger2048(TestLogger):
 class TrainEpisodeLogger2048(Callback):
     """
     TrainEpisodeLogger2048 is a callback function used to plot some charts, updated in real-time, that show the
-    NN training results (max tile reached, average reward, etc.) and to save the results in a CSV file.
+    NN training results (max tile reached, average reward, etc.).
     """
     
-    def __init__(self, filePath):
+    def __init__(self):
         self.observations = {}
         self.rewards = {}
         self.max_tile = {}
@@ -58,7 +58,7 @@ class TrainEpisodeLogger2048(Callback):
         self.max_tile[episode] = 0
     
     def on_episode_end(self, episode, logs):
-        """ Compute and print training statistics of the episode when done but also plot training charts and save the data in a CSV file. """
+        """ Compute and print training statistics of the episode when done """
         self.episode_counter += 1
         self.episodes = np.append(self.episodes, episode + 1)
         self.max_tiles = np.append(self.max_tiles, self.max_tile[episode])

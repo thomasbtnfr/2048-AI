@@ -9,6 +9,7 @@ from Grid import Grid
 class IllegalMove(Exception):
     pass
 
+# Environment useful for the DQN and Gym, based on Grid
 class Game2048Env(gym.Env,Grid):
 
     def __init__(self):

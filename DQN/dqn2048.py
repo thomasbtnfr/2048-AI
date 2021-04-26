@@ -2,7 +2,7 @@
 import os
 import numpy as np
 import random
-from game2048 import Game2048Env # module with game logic for 2048
+from game2048 import Game2048Env
 
 from tensorflow.keras.models import Sequential, Model, load_model
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, Input
@@ -20,9 +20,8 @@ from processors2048 import Log2NNInputProcessor, OneHotNNInputProcessor
 
 
 # TRAIN / TEST MODE
-#TRAIN_TEST_MODE = 'train'
-TRAIN_TEST_MODE = 'test'
-
+TRAIN_TEST_MODE = 'train'
+#TRAIN_TEST_MODE = 'test'
 
 MODEL_TYPE = 'dnn'
 
@@ -74,7 +73,7 @@ dqn.compile(Adam(lr=.00025), metrics=['mse'])
 weights_filename = 'data/weights.h5f'
 checkpoint_weights_filename = 'data/weights_ch_{step}.h5f'
 callbacks = [ModelIntervalCheckpoint(checkpoint_weights_filename, interval=250000)]
-callbacks += [TrainEpisodeLogger2048('data/rescsv.csv')]
+callbacks += [TrainEpisodeLogger2048()]
 
 if TRAIN_TEST_MODE == 'train':
     dqn.fit(env, callbacks=callbacks, nb_steps=500000, verbose=1)

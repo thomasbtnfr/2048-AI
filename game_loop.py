@@ -12,7 +12,6 @@ from collections import Counter
 import random
 import tensorflow as tf
 
-
 def startRemoteController():
     gameDriver = GameDriver()
     moves_str = ['UP', 'DOWN', 'LEFT', 'RIGHT']
@@ -51,8 +50,9 @@ def startTerminalMinMax():
         depth = 5
         moveCode = getBestMove(grid, depth)
 
-        """
+        
         # to save moves for supervised algorithm
+        """
         tmp = [0,0,0,0]
         tmp[moveCode[0]] = 1
         matrixSupervised = grid.getMatrix()

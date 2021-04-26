@@ -2,7 +2,6 @@ import numpy as np
 from game2048 import Game2048Env
 from rl.core import Processor
 
-# Transform the observed matrix to log2N representation
 class Log2NNInputProcessor(Processor):
     def process_observation(self, observation):
         """
