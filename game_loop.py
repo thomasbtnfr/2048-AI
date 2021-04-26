@@ -193,15 +193,3 @@ def main(argv):
 
 if __name__ == "__main__":
     main(sys.argv)
-
-"""
-grid = Grid([[]])
-matrix = [
-    [256,64,0,0],
-    [128,0,0,0],
-    [0,0,256,0],
-    [0,0,0,0],
-]
-grid.setMatrix(matrix)
-matrix2 = grid.getMatrix()
-"""

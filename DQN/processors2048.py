@@ -2,6 +2,8 @@ import numpy as np
 from game2048 import Game2048Env
 from rl.core import Processor
 
+grids_future = []
+
 class Log2NNInputProcessor(Processor):
     def process_observation(self, observation):
         """
@@ -59,7 +61,7 @@ class OneHotNNInputProcessor(Processor):
                          [ 1,      0,      0,      0]]])
     """
     
-    def __init__(self, num_one_hot_matrices=16, window_length=1, model="dnn"):
+    def __init__(self, num_one_hot_matrices=16, n_future_steps = 2, window_length=1, model="dnn"):
         """
         Check description of OneHotNNInputProcessor class
         
@@ -71,6 +73,7 @@ class OneHotNNInputProcessor(Processor):
         self.num_one_hot_matrices = num_one_hot_matrices
         self.window_length = window_length
         self.model = model
+        self.N_FUTURE_STEPS = n_future_steps
         
         self.game_env = Game2048Env() 
         
@@ -130,40 +133,22 @@ class OneHotNNInputProcessor(Processor):
             observation: numpy.array representing the board-matrix of the game 2048 
         
         Returns:
-            list of numpy.arrays with all the possible grids representing the board-matrices of the game in the next 2 steps, with
+            list of numpy.arrays with all the possible grids representing the board-matrices of the game in the next n steps, with
             each grid encoded with a one-hot encoding method.
         """
+        global grids_future
+
         observation = np.reshape(observation, (4, 4))
-        
-        grids_list_step1 = self.get_grids_next_step(observation)
-        grids_list_step2 =[]
-        for grid in grids_list_step1:
-            grids_list_step2.append(grid) # In the NN input I give both, the 1-step and 2-step grids
-            grids_temp = self.get_grids_next_step(grid)
-            for grid_temp in grids_temp:
-                grids_list_step2.append(grid_temp)
-        grids_list = np.array([self.one_hot_encoding(grid) for grid in grids_list_step2])
-        
-        return grids_list
-    
-    def process_state_batch(self, batch):
-        """
-        process_state_batch processes an entire batch of states and returns it.
-        It is required to reshape the NN input in case we want to use a CNN model with the one-hot encoding.
-        The implementation contemplates only the case where we look at the grids of the 2 next steps (for a total
-        of 4+4*4=20 grids).
-        Check the comments in dqn2048.py regarding the input shape of the CNNs.
-        
-        Args:
-            batch (list): List of states
-        
-        Returns:
-            Processed list of states
-        """
-        if self.model == "cnn": # batch pre-processing only required for the cnn models
-            try:
-                batch = np.reshape(batch, (self.window_length, self.window_length*(4+4*4)*self.num_one_hot_matrices, 4, 4))
-            except:
-                batch = np.reshape(batch, (np.shape(batch)[0], self.window_length*(4+4*4)*self.num_one_hot_matrices, 4, 4))
-                pass
-        return batch
+
+        grids_future = []
+        self.getListGrids(self.N_FUTURE_STEPS, observation)
+        return np.array([self.one_hot_encoding(grid) for grid in grids_future])
+
+    def getListGrids(self, n, observation):
+        if (n > 0):
+            grids_list_step1 = self.get_grids_next_step(observation)
+            for grid in grids_list_step1:
+                grids_future.append(grid)
+                self.getListGrids(n-1, grid)
+             
+

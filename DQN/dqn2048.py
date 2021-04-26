@@ -18,12 +18,21 @@ from rl.callbacks import FileLogger, ModelIntervalCheckpoint
 from callbacks2048 import TrainEpisodeLogger2048, TestLogger2048
 from processors2048 import Log2NNInputProcessor, OneHotNNInputProcessor
 
-
-# TRAIN / TEST MODE
+# CHOOSE TRAIN / TEST MODE
 TRAIN_TEST_MODE = 'train'
 #TRAIN_TEST_MODE = 'test'
 
 MODEL_TYPE = 'dnn'
+
+# We provide the future N_FUTURE_STATES environment states to the DNN network
+N_FUTURE_STEPS = 3
+def n_future_states(N_FUTURE_STEPS):
+    res = 0
+    for i in range(1,N_FUTURE_STEPS+1):
+        res += 4**i
+    return res
+N_FUTURE_STATES = n_future_states(N_FUTURE_STEPS)
+print('FUTURE STATES',N_FUTURE_STATES)
 
 NUM_ACTIONS_OUTPUT_NN = 4 # number of possible actions ( = number of neurons for the output layer)
 WINDOW_LENGTH = 1
@@ -32,7 +41,7 @@ INPUT_SHAPE = (4, 4) # game-grid/matrix size (input shape for the neural network
 # Decide the pre-processing method for the neural network inputs:
 #PREPROC="log2" 
 PREPROC="onehot2steps"
-NUM_ONE_HOT_MAT = 16 # number of matrices to use for encoding each game-grid in the one-hot encoding pre-processing
+NUM_ONE_HOT_MAT = 16 # number of matrices to use for encoding each game-grid
 
 # Set the training hyperparameters:
 NB_STEPS_TRAINING = int(50000) # number of steps used for training the model
@@ -54,8 +63,8 @@ env = Game2048Env()
 np.random.seed(123)
 env.seed(123)
 
-processor = OneHotNNInputProcessor(num_one_hot_matrices=NUM_ONE_HOT_MAT)
-INPUT_SHAPE_DNN = (WINDOW_LENGTH, 4+4*4, NUM_ONE_HOT_MAT,) + INPUT_SHAPE
+processor = OneHotNNInputProcessor(num_one_hot_matrices=NUM_ONE_HOT_MAT, n_future_steps = N_FUTURE_STEPS)
+INPUT_SHAPE_DNN = (WINDOW_LENGTH, N_FUTURE_STATES, NUM_ONE_HOT_MAT,) + INPUT_SHAPE
 
 model = build_model()
 
