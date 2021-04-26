@@ -71,7 +71,7 @@ model = build_model()
 memory = SequentialMemory(limit=1000000, window_length=1)
 policy = LinearAnnealedPolicy(EpsGreedyQPolicy(), attr='eps', value_max=1., value_min=.1, value_test=.05, nb_steps=1000000)
 TRAIN_POLICY = LinearAnnealedPolicy(EpsGreedyQPolicy(), attr='eps', value_max=0.05, value_min=0.05, value_test=0.01, nb_steps=NB_STEPS_ANNEALED)
-TEST_POLICY = EpsGreedyQPolicy(eps=.01)
+TEST_POLICY = EpsGreedyQPolicy(eps=.01) # to reduce the number of illegal moves
 
 dqn = DQNAgent(model=model, nb_actions=NUM_ACTIONS_OUTPUT_NN, test_policy=TEST_POLICY, policy=TRAIN_POLICY, memory=memory, processor=processor,
                     nb_steps_warmup=NB_STEPS_WARMUP, gamma=.99, target_model_update=TARGET_MODEL_UPDATE, train_interval=4, delta_clip=1.)
