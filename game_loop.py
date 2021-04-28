@@ -11,29 +11,87 @@ import pandas as pd
 from collections import Counter
 import random
 import tensorflow as tf
+import argparse
 
-def startRemoteController():
+parser = argparse.ArgumentParser()
+parser.add_argument('--remote', help='remote controller option', action='store_true')
+parser.add_argument('algorithm', nargs=1, help='minmax,mcts,emm,supervised')
+parser.add_argument('nb_games', nargs=1, help='number of games', type=int)
+args = parser.parse_args()
+parser.print_help()
+
+def startRemoteControllerMinMax():
     gameDriver = GameDriver()
-    moves_str = ['UP', 'DOWN', 'LEFT', 'RIGHT']
-    moves_count = 1
 
     while True:
         grid = gameDriver.getGrid()
         if grid.isGameOver():
             print("Unfortunately, I lost the game.")
             break
-        if grid.nbEmpty() < 2:
-            depth = 8
-        elif grid.nbEmpty() < 4:
-            depth = 6
-        elif grid.nbEmpty() < 6:
-            depth = 4
-        else:
-            depth = 3
+        depth = 4
         moveCode = getBestMove(grid, depth)
-        print(f'Move #{moves_count}: {moves_str[moveCode[0]]} | Utility {moveCode[1]}, NbEmpty {grid.nbEmpty()}')
         gameDriver.move(moveCode[0])
-        moves_count += 1
+
+    return grid.score, grid.maxValue()
+
+def startRemoteControllerMCTS():
+    gameDriver = GameDriver()
+
+    while True:
+        grid = gameDriver.getGrid()
+        if grid.isGameOver():
+            print("Unfortunately, I lost the game.")
+            break
+        moveCode = mcts_move(grid, 40, 40)
+        gameDriver.move(moveCode)
+
+    return grid.score, grid.maxValue()
+
+def startRemoteControllerEmm():
+    gameDriver = GameDriver()
+
+    while True:
+        grid = gameDriver.getGrid()
+        if grid.isGameOver():
+            print("Unfortunately, I lost the game.")
+            break
+        depth = 3
+        moveCode = getBestMoveEMM(grid, depth)
+        gameDriver.move(moveCode[0])
+
+    return grid.score, grid.maxValue()
+
+def startRemoteControllerRandom():
+    gameDriver = GameDriver()
+
+    while True:
+        grid = gameDriver.getGrid()
+        if grid.isGameOver():
+            print("Unfortunately, I lost the game.")
+            break
+        moves = grid.getAvailableMovesForMax()
+        move_chosen = random.choice(moves)
+        gameDriver.move(move_chosen)
+
+    return grid.score, grid.maxValue()
+
+def startRemoteControllerSupervised(model):
+    gameDriver = GameDriver()
+
+    while True:
+        grid = gameDriver.getGrid()
+        if grid.isGameOver():
+            print("Unfortunately, I lost the game.")
+            break
+        pred = model.predict(np.array([flattenMatrix(grid.getMatrix())]))
+        pred = pred[0]
+        orderedMoveCode = np.argsort(pred)[::-1]
+        for move in orderedMoveCode:
+            if (move == 0 and grid.canMoveUp()) or (move == 1 and grid.canMoveDown()) or (move == 2 and grid.canMoveLeft()) or (move == 3 and grid.canMoveRight()):
+                gameDriver.move(move)
+                break
+
+    return grid.score, grid.maxValue()
 
 def startTerminalMinMax():
     moves_str = ['UP', 'DOWN', 'LEFT', 'RIGHT']
@@ -170,26 +228,37 @@ def writeResultat(fileName: str, maxTile: int, score: int):
         f.write(''.join(resultats))
 
 def startTerminal(algoName: str):
-    if algoName == 'minmax':
-        return startTerminalMinMax()
-    elif algoName == 'random':
-        return startTerminalRandom()
-    elif algoName == "emm":
-        return startTerminalEmm()
-    elif algoName == "supervised":
-        return startTerminalSupervised(tf.keras.models.load_model('supervisedModel'))
-    elif algoName == 'mcts':
-        return startTerminalMCTS()
+    if not args.remote:
+        if algoName == 'minmax':
+            return startTerminalMinMax()
+        elif algoName == 'random':
+            return startTerminalRandom()
+        elif algoName == "emm":
+            return startTerminalEmm()
+        elif algoName == "supervised":
+            return startTerminalSupervised(tf.keras.models.load_model('supervisedModel'))
+        elif algoName == 'mcts':
+            return startTerminalMCTS()
+        else:
+            print('Unknown algorithm')
     else:
-        print('Unknown algorithm')
+        if algoName == 'minmax':
+            return startRemoteControllerMinMax()
+        elif algoName == 'random':
+            return startRemoteControllerRandom()
+        elif algoName == "emm":
+            return startRemoteControllerEmm()
+        elif algoName == "supervised":
+            return startRemoteControllerSupervised(tf.keras.models.load_model('supervisedModel'))
+        elif algoName == 'mcts':
+            return startRemoteControllerMCTS()
+        else:
+            print('Unknown algorithm')
 
 def evaluateModel(NbGame: int, modelName: str):
     for i in range(NbGame):
         score, maxTile = startTerminal(modelName)
         writeResultat(modelName, maxTile, score)
         
-def main(argv):
-    evaluateModel(int(argv[2]),argv[1])
-
 if __name__ == "__main__":
-    main(sys.argv)
+    evaluateModel(args.nb_games[0], args.algorithm[0])
