@@ -43,6 +43,7 @@ def printGraph():
     os.chdir("./")
     plt.xlabel("Games")
     plt.ylabel("Max Tile")
+    plt.title("Max Tile evolution for each algorithm")
     colnames = ['MaxTile','Score']
     for file in glob.glob("*.txt"):
         if file != "supervisedData.txt":

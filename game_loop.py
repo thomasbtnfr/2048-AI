@@ -105,7 +105,14 @@ def startTerminalMinMax():
         if grid.isGameOver():
             print("Unfortunately, I lost the game.")
             break
-        depth = 5
+        if grid.nbEmpty() < 2:
+            depth = 8
+        elif grid.nbEmpty() < 4:
+            depth = 6
+        elif grid.nbEmpty() < 6:
+            depth = 4
+        else:
+            depth = 3
         moveCode = getBestMove(grid, depth)
 
         
