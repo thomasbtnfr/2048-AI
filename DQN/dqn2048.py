@@ -19,8 +19,8 @@ from callbacks2048 import TrainEpisodeLogger2048, TestLogger2048
 from processors2048 import Log2NNInputProcessor, OneHotNNInputProcessor
 
 # CHOOSE TRAIN / TEST MODE
-TRAIN_TEST_MODE = 'train'
-#TRAIN_TEST_MODE = 'test'
+# TRAIN_TEST_MODE = 'train'
+TRAIN_TEST_MODE = 'test'
 
 MODEL_TYPE = 'dnn'
 
@@ -44,7 +44,6 @@ PREPROC="onehot2steps"
 NUM_ONE_HOT_MAT = 16 # number of matrices to use for encoding each game-grid
 
 # Set the training hyperparameters:
-NB_STEPS_TRAINING = int(50000) # number of steps used for training the model
 NB_STEPS_ANNEALED = int(1e5) # number of steps used in LinearAnnealedPolicy()
 NB_STEPS_WARMUP = 5000 # number of steps to fill memory before training
 TARGET_MODEL_UPDATE = 1000
@@ -79,15 +78,15 @@ dqn = DQNAgent(model=model, nb_actions=NUM_ACTIONS_OUTPUT_NN, test_policy=TEST_P
 dqn.compile(Adam(lr=.00025), metrics=['mse'])
 
 
-weights_filename = 'data/weights.h5f'
+weights_filename = 'data/weights_3_100000.h5f'
 checkpoint_weights_filename = 'data/weights_ch_{step}.h5f'
 callbacks = [ModelIntervalCheckpoint(checkpoint_weights_filename, interval=250000)]
 callbacks += [TrainEpisodeLogger2048()]
 
 if TRAIN_TEST_MODE == 'train':
-    dqn.fit(env, callbacks=callbacks, nb_steps=500000, verbose=1)
+    dqn.fit(env, callbacks=callbacks, nb_steps=100000, verbose=1)
     dqn.save_weights(weights_filename, overwrite=True)
 else:
-    dqn.load_weights('data/weights_ch_250000.h5f')
+    dqn.load_weights('data/weights_ch_500000.h5f')
     _callbacks = [TestLogger2048()] 
-    dqn.test(env, nb_episodes=5, visualize=True, callbacks=_callbacks)
+    dqn.test(env, nb_episodes=50, visualize=True, callbacks=_callbacks)

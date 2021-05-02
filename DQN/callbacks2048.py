@@ -6,7 +6,10 @@ from game_loop import writeResultat
     
 class TestLogger2048(TestLogger):
     def on_episode_end(self, episode, logs):
-        """ TestLogger2048 is a callback function that prints the score and the grid at end of each episode/game match """
+        """ 
+        TestLogger2048 is a callback function that prints the score and the grid at end of each episode/game match.
+        It stores in memory the max tile and the score reached. 
+        """
         
         grid = self.env.get_board()
         score = self.env.score
@@ -41,12 +44,12 @@ class TrainEpisodeLogger2048(Callback):
         self.ax2 = self.fig_reward.add_subplot(1,1,1) 
         
         # Max Tiles Means/Episode Rewards Means: initialize variables and figures
-        self.max_tiles_means = 0
-        self.episodes_rewards_means = 0
-        self.fig_max_tile_mean = plt.figure()
-        self.ax3 = self.fig_max_tile_mean.add_subplot(1,1,1) 
-        self.fig_reward_mean = plt.figure()
-        self.ax4 = self.fig_reward_mean.add_subplot(1,1,1) 
+        # self.max_tiles_means = 0
+        # self.episodes_rewards_means = 0
+        # self.fig_max_tile_mean = plt.figure()
+        # self.ax3 = self.fig_max_tile_mean.add_subplot(1,1,1) 
+        # self.fig_reward_mean = plt.figure()
+        # self.ax4 = self.fig_reward_mean.add_subplot(1,1,1) 
         
         self.nb_episodes_for_mean = 50 # calculate means after this amount of episodes 
         self.episode_counter = 0 # Used to count the episodes and to decide when to calculate the average and plot it
@@ -78,24 +81,24 @@ class TrainEpisodeLogger2048(Callback):
 
         # Figures: Means
         # Graphs for values averaged across more episodes (e.g., averages over 50 episodes, etc.)
-        if self.episode_counter % self.nb_episodes_for_mean == 0 :
-            self.max_tiles_means = np.append(self.max_tiles_means,np.mean(self.max_tiles[-self.nb_episodes_for_mean:]))
-            self.fig_max_tile_mean.clear()
-            plt.figure(self.fig_max_tile_mean.number)
-            plt.plot(np.arange(0,self.episode_counter+self.nb_episodes_for_mean,self.nb_episodes_for_mean), self.max_tiles_means)
-            plt.title("max tiles means (over last {} episodes)".format(self.nb_episodes_for_mean))
-            plt.xlabel("episode #")
-            plt.ylabel("max tiles mean")
-            plt.pause(0.01) # https://github.com/matplotlib/matplotlib/issues/7759/
+        # if self.episode_counter % self.nb_episodes_for_mean == 0 :
+        #     self.max_tiles_means = np.append(self.max_tiles_means,np.mean(self.max_tiles[-self.nb_episodes_for_mean:]))
+        #     self.fig_max_tile_mean.clear()
+        #     plt.figure(self.fig_max_tile_mean.number)
+        #     plt.plot(np.arange(0,self.episode_counter+self.nb_episodes_for_mean,self.nb_episodes_for_mean), self.max_tiles_means)
+        #     plt.title("max tiles means (over last {} episodes)".format(self.nb_episodes_for_mean))
+        #     plt.xlabel("episode #")
+        #     plt.ylabel("max tiles mean")
+        #     plt.pause(0.01) # https://github.com/matplotlib/matplotlib/issues/7759/
             
-            self.episodes_rewards_means = np.append(self.episodes_rewards_means,np.mean(self.episodes_rewards[-self.nb_episodes_for_mean:]))
-            self.fig_reward_mean.clear()
-            plt.figure(self.fig_reward_mean.number)            
-            plt.plot(np.arange(0,self.episode_counter+self.nb_episodes_for_mean,self.nb_episodes_for_mean), self.episodes_rewards_means)
-            plt.title("rewards means (over last {} episodes)".format(self.nb_episodes_for_mean))
-            plt.xlabel("episode #")
-            plt.ylabel("rewards mean")
-            plt.pause(0.01)
+        #     self.episodes_rewards_means = np.append(self.episodes_rewards_means,np.mean(self.episodes_rewards[-self.nb_episodes_for_mean:]))
+        #     self.fig_reward_mean.clear()
+        #     plt.figure(self.fig_reward_mean.number)            
+        #     plt.plot(np.arange(0,self.episode_counter+self.nb_episodes_for_mean,self.nb_episodes_for_mean), self.episodes_rewards_means)
+        #     plt.title("rewards means (over last {} episodes)".format(self.nb_episodes_for_mean))
+        #     plt.xlabel("episode #")
+        #     plt.ylabel("rewards mean")
+        #     plt.pause(0.01)
         
         # Figures: Points
         self.fig_max_tile.clear()

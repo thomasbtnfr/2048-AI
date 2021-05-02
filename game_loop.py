@@ -256,7 +256,7 @@ def startTerminal(algoName: str):
             print('Unknown algorithm')
 
 def evaluateModel(NbGame: int, modelName: str):
-    for i in range(NbGame):
+    for _ in range(NbGame):
         score, maxTile = startTerminal(modelName)
         writeResultat(modelName, maxTile, score)
         
