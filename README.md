@@ -22,7 +22,7 @@ Our goal was to implement several algorithms and to compare them.
    To develop supervised learning, we stored states and the associated action in memory during games.  This algorithm was developed before the DQN to discover more easily how to implement a neural network for the 2048 game. We quickly noticed that the results were not very good because we did not have enough data. That's why we decided to switch to reinforcement learning.
 5. ### MCTS : Monte-Carlo Tree-Search
 
-## Run an AI algorithm in the terminal
+## Run an AI algorithm in the terminal or in web browser
 
 All except DQN : 
 
