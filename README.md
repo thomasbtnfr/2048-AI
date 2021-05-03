@@ -16,30 +16,12 @@ Our goal was to implement several algorithms and to compare them.
 
     - **Minmax VS Expectimax**
 
-    Because these algorithms are very closed but doesn't have the same effect, we have decided to show the differences between them. First of all, here are the representations of the tree of each algorithm :
+    Because these algorithms are very closed but doesn't have the same effect, we have decided to show the differences between them. First of all, here are the representations of the tree of each algorithm  (Minmax at the right and expectimax at the left) :
    
-   
-    <u>Minmax tree :</u> 
-
-   ![](./images/minimaxdrawing.jpg)
-
-   <u>Expectimax tree :</u>
-
-   ![](./images/expectimaxdrawing.jpg)
-
-   Here as we can see, we have replaced "min" nodes by "chance" nodes. The big advantage of expectimax over minmax is that expectimax helps to take into account non-optimal opponents. If opponents are random, expectimax can "take a risk" and can have better results than minmax. For example on these drawings the utility will be 54.5 using the expectimax tree instead of 10 using the minmax tree. But there is also disadvantages with the expectimax algorithm.  The expectimax algorithm is not an optimal algorithm : it may lead to the agent losing with a lesser utility. There is no type of pruning that can be done as in the minmax algorithm with the beta-pruning, because a single value of a single unexplored utility can change the result drastically. This is why we can't use a too big depth in the algorithm, because we can't reduce the tree exploration. 
-   
-   
-   
-   
-   
-   
-   
-   
-   
+   <img src="./images/minimaxdrawing.jpg" style="zoom:57%;" /><img src="./images/expectimaxdrawing.jpg" style="zoom:57%;" />Here as we can see, we have replaced "min" nodes by "chance" nodes. The big advantage of expectimax over minmax is that expectimax helps to take into account non-optimal opponents. If opponents are random, expectimax can "take a risk" and can have better results than minmax. For example on these drawings the utility will be 54.5 using the expectimax tree instead of 10 using the minmax tree. But there is also disadvantages with the expectimax algorithm.  The expectimax algorithm is not an optimal algorithm : it may lead to the agent losing with a lesser utility. There is no type of pruning that can be done as in the minmax algorithm with the beta-pruning, because a single value of a single unexplored utility can change the result drastically. This is why we can't use a too big depth in the algorithm, because we can't reduce the tree exploration. 
    
 
-
+   
 
 
 3. ### Supervised Learning
