@@ -12,7 +12,17 @@ Our goal was to implement several algorithms and to compare them.
    
 2. ### Expectimax
 
-   TODO
+   The expectimax algorithm is a variant of the minmax algorithm. In fact this algorithm uses also the system of two players (one to maximize, the other to minimize), but here, unlike the minmax algorithm, we are taking into account the "chance" parameter. In addition to the "min" and "max" nodes of the traditional minmax tree, this variant has "chances" nodes, which take the expected value of a random event. Here in the 2048 game, the "chance" parameter is the parameter which define the random apparition of a 2 or 4 annoted tile. While minmax assumes that the adversary (the minimizer) plays optimally, the expectimax doesn't. So here, in our implementation, we are replacing the "min" node by a "chance" node. This node simply returns the mean of his child.
+
+    - **Minmax VS Expectimax**
+
+    Because these algorithms are very closed but doesn't have the same effect, we have decided to show the differences between them. First of all, here are the representations of the tree of each algorithm  (Minmax at the right and expectimax at the left) :
+   
+   <img src="./images/minimaxdrawing.jpg" style="zoom:57%;" /><img src="./images/expectimaxdrawing.jpg" style="zoom:57%;" />Here as we can see, we have replaced "min" nodes by "chance" nodes. The big advantage of expectimax over minmax is that expectimax helps to take into account non-optimal opponents. If opponents are random, expectimax can "take a risk" and can have better results than minmax. For example on these drawings the utility will be 54.5 using the expectimax tree instead of 10 using the minmax tree. But there is also disadvantages with the expectimax algorithm.  The expectimax algorithm is not an optimal algorithm : it may lead to the agent losing with a lesser utility. There is no type of pruning that can be done as in the minmax algorithm with the beta-pruning, because a single value of a single unexplored utility can change the result drastically. This is why we can't use a too big depth in the algorithm, because we can't reduce the tree exploration. 
+   
+
+   
+
 
    
 
