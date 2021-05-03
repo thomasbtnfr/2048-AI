@@ -8,7 +8,7 @@ Our goal was to implement several algorithms and to compare them.
 
 1. ### Minmax
 
-   The minmax algorithm is used for games between opponents. To implement it, we consider two players: max and min. Max must maximize the score and corresponds to the player. He performs at each turn one of the 4 possible actions. Min corresponds to the computer that places a 2 or 4 on the grid each turn. It is not really an opponent, because it plays randomly but for this algorithm we considered it as an opponent and the results are interisting.
+   The minmax algorithm is used for games between opponents. To implement it, we consider two players: max and min. Max must maximize the score and corresponds to the player. He performs at each turn one of the 4 possible actions. Min corresponds to the computer that places a 2 or 4 on the grid each turn. It is not really an opponent, because it plays randomly but for this algorithm we considered it as an opponent and the results are interisting. We considered that the Min player was trying to place the 2 or 4 in the worst places for us Max player. We also added alpha beta prunning.
    
 2. ### Expectimax
 
