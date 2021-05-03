@@ -14,6 +14,8 @@ Our goal was to implement several algorithms and to compare them.
 
    TODO
 
+   
+
 3. ### Supervised Learning
 
    To develop supervised learning, we stored states and the associated action in memory during games in the file named *supervisedData.txt*.  This algorithm was developed before the DQN to discover more easily how to implement a neural network for the 2048 game. We quickly noticed that the results were not very good because we did not have enough data. That's why we decided to switch to reinforcement learning.
@@ -30,7 +32,21 @@ Our goal was to implement several algorithms and to compare them.
 
 ## Heuristics 
 
-For the Minmax and Expectimax algorithms, we tried different heuristics. 
+For the Minmax and Expectimax algorithms, we tried different heuristics. At first we tried simple things like maximizing only the maximum value of the grid but this is not interesting because several configurations can share the same maximum. So to differentiate them, this is not possible. So we have to take into account other elements. Here are the different heuristics combined in our case :
+
+- **Maximize the maximum value** : even if this heuristic alone is not very interesting, combined it is.
+
+- **Free tiles** : having too few free squares is dangerous because the possible options decrease greatly when the grid becomes too full.
+
+- **Smoothness** : the goal of this heuristic is to decrease the difference in value between neighboring tiles to merge them more easily by minimizing the sum of the differences.
+
+  <img src="./images/smoothness.png" style="zoom:50%;" />
+
+- **Monotonicity :** its goal is to ensure that the values of the tiles are all increasing or decreasing in the up/down and left/right directions. It allows you to group the important values in the corners and to have a more structured game grid as many humans would do. Another slightly more simplistic heuristic is to make sure that the maximum tile is in one of the corners of the grid.
+
+  <img src="./images/monotonicity.png" style="zoom:50%;" />
+
+We combined these different heuristics with different weights after experimentation. In our code, we did not use the same heuristics to evaluate Minmax and Expectimax but we could have done so. We each tried our own heuristics.
 
 ## Run an AI algorithm in the terminal or in web browser
 
@@ -45,7 +61,7 @@ name_algo can be :
 - emm
 - supervised
 
---remote is optional, it allows to launch the 2048 game directly online with the selected algorithm
+--remote is optional, it allows to launch the 2048 game directly online with the selected algorithm. This works with the Selenium Python library.
 
 --help : presents the different possibilities
 ```
