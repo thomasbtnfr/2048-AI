@@ -104,3 +104,22 @@ To launch it :
 python statistics.py algoName 										algoName can be : minmax, dqn, emm, supervised, mcts, random
 ```
 
+
+
+#### Overall results
+
+Globally, we observe that the expectimax gives us the best results (60% of victory) followed by the minmax (47% of victory) and the mcts (38% of victory).  For the expectimax and the minmax, we observed that the results depend largely on the chosen heuristics. The DQN, trained on 500,000 steps, with 2 observed future states, reaches 512 in 42% of the cases. The result is below our expectations for a training that lasted ~2h30 minutes with GPU. Concerning the supervised learning model, it is clear that the lack of data prevented it from improving. This type of model takes too much time for this kind of problem compared to the gain it offers.
+
+#### More information about learning the DQN
+
+We tried to learn two models. One on 500,000 steps and with 2 moves ahead. It took about 2h30min and a second one with 3 moves ahead. From 100,000 steps, the training slowed down a lot. That's why we chose to go to 100000 steps for the latter.
+
+- 500,000 steps with 2 moves ahead: 
+
+<img src="./images/maxtile500k_2.png" style="zoom: 80%;" /> <img src="./images/reward500k_2.png" style="zoom: 80%;" />
+
+- 100,000 steps with 3 moves ahead: 
+
+<img src="./images/maxtile100k_3.png" style="zoom: 80%;" /> <img src="./images/reward100k_3.png" style="zoom: 80%;" />
+
+As expected, scores increase much faster with the addition of information about future opportunities and the results are very close with only 100,000 steps compared to 500,000 previously. We tried to train the second model on 500000 steps but the training became much too long and required a lot of memory. That's why our results are based on the 500000 steps model.
