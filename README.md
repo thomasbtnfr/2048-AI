@@ -24,7 +24,7 @@ Our goal was to implement several algorithms and to compare them.
    
 
 
-   
+
 
 3. ### Supervised Learning
 
@@ -159,3 +159,9 @@ We tried to learn two models. One on 500,000 steps and with 2 moves ahead. It to
 <img src="./images/maxtile100k_3.png" style="zoom: 80%;" /> <img src="./images/reward100k_3.png" style="zoom: 80%;" />
 
 As expected, scores increase much faster with the addition of information about future opportunities and the results are very close with only 100,000 steps compared to 500,000 previously. We tried to train the second model on 500,000 steps but the training became much too long and required a lot of memory. That's why our results are based on the 500000 steps model.
+
+
+
+## Conclusion
+
+During this module, we were able to implement the 2048 game and use many AI algorithms. We also understood that in some cases, some algorithms are not really adapted to a problem, such as supervised learning which requires too much time to generate data in the case of 2048. Algorithms like Expectimax or Minmax gave us the best results. They have the advantage of being simple to implement. That said, we need to work more on the heuristics to get interesting results. The Expectimax corresponds very well to the game of 2048 thanks to the chance of appearance that it takes into account. MCTS and DQN have the advantage that humans have very little data to give them. The MCTS gave interesting results for a simple implementation. On the other hand, the results of the DQN were not very convincing in relation to the time spent. That said, with a lot of training, it would certainly have been very good.
