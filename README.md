@@ -19,7 +19,7 @@ Our goal was to implement several algorithms and to compare them.
    TODO
 4. ### Supervised Learning
 
-   To develop supervised learning, we stored states and the associated action in memory during games.  This algorithm was developed before the DQN to discover more easily how to implement a neural network for the 2048 game. We quickly noticed that the results were not very good because we did not have enough data. That's why we decided to switch to reinforcement learning.
+   To develop supervised learning, we stored states and the associated action in memory during games in the file named *supervisedData.txt*.  This algorithm was developed before the DQN to discover more easily how to implement a neural network for the 2048 game. We quickly noticed that the results were not very good because we did not have enough data. That's why we decided to switch to reinforcement learning.
 5. ### MCTS : Monte-Carlo Tree-Search
 
 ## Run an AI algorithm in the terminal or in web browser
@@ -50,3 +50,57 @@ For train/test, change the value of the boolean TRAIN_TEST_MODE
 ```
 
 ## Results
+
+Several scripts allow to visualize the results of the algorithms. To save the data, we used a .txt file for each algorithm in which we wrote for each game the maximum value reached and the score.
+
+- The most general one allows to see for each algorithm the percentage to reach each value :
+
+![](./images/histo_maxtile.png)
+
+To launch it : 
+
+```
+python statistics.py histo
+```
+
+
+
+- The following table shows the evolution of each algorithm over 50 games :
+
+  ![](./images/graph_maxtile.png)
+
+To launch it :
+
+```
+python statistics.py graph
+```
+
+
+
+- A script allows to visualize the results for each algorithm individually :
+
+```console
+----------------------------------------------------------------------------------------------------
+Results algorithm : emm | Number of games :  50
+----------------------------------------------------------------------------------------------------
+Max Tile reached : 2048
+Maximum Tile Mean : 1607.68
+----------------------------------------------------------------------------------------------------
+Score Max reached : 36152
+Score Mean : 23256.24
+----------------------------------------------------------------------------------------------------
+Probability to reach the following values
+1024 | 34.0%
+2048 | 60.0%
+512 | 6.0%
+[1024, 2048, 512]
+```
+
+![](./images/pie_emm.png)
+
+To launch it : 
+
+```
+python statistics.py algoName 										algoName can be : minmax, dqn, emm, supervised, mcts, random
+```
+
