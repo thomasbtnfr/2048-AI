@@ -13,13 +13,6 @@ import random
 import tensorflow as tf
 import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--remote', help='remote controller option', action='store_true')
-parser.add_argument('algorithm', nargs=1, help='minmax,mcts,emm,supervised')
-parser.add_argument('nb_games', nargs=1, help='number of games', type=int)
-args = parser.parse_args()
-parser.print_help()
-
 def startRemoteControllerMinMax():
     gameDriver = GameDriver()
 
@@ -268,4 +261,10 @@ def evaluateModel(NbGame: int, modelName: str):
         writeResultat(modelName, maxTile, score)
         
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--remote', help='remote controller option', action='store_true')
+    parser.add_argument('algorithm', nargs=1, help='minmax,mcts,emm,supervised')
+    parser.add_argument('nb_games', nargs=1, help='number of games', type=int)
+    args = parser.parse_args()
+    parser.print_help()
     evaluateModel(args.nb_games[0], args.algorithm[0])

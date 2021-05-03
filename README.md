@@ -26,7 +26,11 @@ Our goal was to implement several algorithms and to compare them.
 
 5. ### MCTS : Monte-Carlo Tree-Search
 
-   The MCTS algorithm is an algorithm that explores the tree of possibilities. The root is the initial configuration of the grid. Each node is a configuration and its children are the following configurations accessible from the initial grid
+   The MCTS algorithm is an algorithm that explores the tree of possibilities. The root is the initial configuration of the grid. Each node is a configuration and its children are the following configurations accessible from the initial grid.
+
+## Heuristics 
+
+For the Minmax and Expectimax algorithms, we tried different heuristics. 
 
 ## Run an AI algorithm in the terminal or in web browser
 
@@ -128,4 +132,4 @@ We tried to learn two models. One on 500,000 steps and with 2 moves ahead. It to
 
 <img src="./images/maxtile100k_3.png" style="zoom: 80%;" /> <img src="./images/reward100k_3.png" style="zoom: 80%;" />
 
-As expected, scores increase much faster with the addition of information about future opportunities and the results are very close with only 100,000 steps compared to 500,000 previously. We tried to train the second model on 500000 steps but the training became much too long and required a lot of memory. That's why our results are based on the 500000 steps model.
+As expected, scores increase much faster with the addition of information about future opportunities and the results are very close with only 100,000 steps compared to 500,000 previously. We tried to train the second model on 500,000 steps but the training became much too long and required a lot of memory. That's why our results are based on the 500000 steps model.

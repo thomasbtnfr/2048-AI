@@ -151,4 +151,3 @@ class OneHotNNInputProcessor(Processor):
                 grids_future.append(grid)
                 self.getListGrids(n-1, grid)
              
-
