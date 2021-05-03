@@ -1,4 +1,3 @@
-
 import os
 import numpy as np
 import random
@@ -25,7 +24,7 @@ TRAIN_TEST_MODE = 'test'
 MODEL_TYPE = 'dnn'
 
 # We provide the future N_FUTURE_STATES environment states to the DNN network
-N_FUTURE_STEPS = 3
+N_FUTURE_STEPS = 2
 def n_future_states(N_FUTURE_STEPS):
     res = 0
     for i in range(1,N_FUTURE_STEPS+1):
@@ -78,7 +77,7 @@ dqn = DQNAgent(model=model, nb_actions=NUM_ACTIONS_OUTPUT_NN, test_policy=TEST_P
 dqn.compile(Adam(lr=.00025), metrics=['mse'])
 
 
-weights_filename = 'data/weights_3_100000.h5f'
+weights_filename = 'data/weights.h5f'
 checkpoint_weights_filename = 'data/weights_ch_{step}.h5f'
 callbacks = [ModelIntervalCheckpoint(checkpoint_weights_filename, interval=250000)]
 callbacks += [TrainEpisodeLogger2048()]
@@ -87,6 +86,6 @@ if TRAIN_TEST_MODE == 'train':
     dqn.fit(env, callbacks=callbacks, nb_steps=100000, verbose=1)
     dqn.save_weights(weights_filename, overwrite=True)
 else:
-    dqn.load_weights('data/weights_ch_500000.h5f')
+    dqn.load_weights('data/DQN_data_weights_ch_500000.h5f')
     _callbacks = [TestLogger2048()] 
-    dqn.test(env, nb_episodes=50, visualize=True, callbacks=_callbacks)
+    dqn.test(env, nb_episodes=1, visualize=True, callbacks=_callbacks)
